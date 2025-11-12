@@ -10,7 +10,7 @@ const Produtos = () => {
   // Buscar produtos
   const fetchProdutos = async () => {
     try {
-      const res = await fetch("http://localhost:3000/produtos");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/produtos`);
       const data = await res.json();
       setProdutos(data);
       setLoading(false);
@@ -31,7 +31,7 @@ const Produtos = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/produtos", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/produtos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

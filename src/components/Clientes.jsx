@@ -10,7 +10,7 @@ const Clientes = () => {
   // Buscar clientes
   const fetchClientes = async () => {
     try {
-      const res = await fetch("http://localhost:3000/clientes");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/clientes`);
       const data = await res.json();
       setClientes(data);
       setLoading(false);
@@ -31,7 +31,7 @@ const Clientes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/clientes", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/clientes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
