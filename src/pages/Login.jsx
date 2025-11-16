@@ -1,39 +1,34 @@
-// src/pages/Login.jsx
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
-    setMsg("");
 
     try {
-      const base = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${base}/auth/login`, {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = await res.json();
 
-      if (!res.ok || !data.token) {
-        setMsg(data.msg || data.erro || "Email ou senha incorretos.");
+      if (!data.token) {
+        alert("Email ou senha incorretos");
         return;
       }
 
-      // salvar token localmente
       localStorage.setItem("token", data.token);
-      // redirecionar para dashboard
-      navigate("/dashboard");
+      navigate("/dashboard"); // Vai para a página de boas-vindas
     } catch (err) {
       console.error("Erro no login:", err);
-      setMsg("Erro de rede. Tente novamente.");
+      alert("Erro de rede. Tente novamente.");
     }
   }
 
@@ -50,7 +45,6 @@ function Login() {
           required
         />
         <br /><br />
-
         <input
           type="password"
           placeholder="Senha"
@@ -65,9 +59,7 @@ function Login() {
         </button>
       </form>
 
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
-
-      <br />
+      <br /><br />
 
       <Link to="/">
         <button>Voltar</button>
@@ -77,4 +69,3 @@ function Login() {
 }
 
 export default Login;
-

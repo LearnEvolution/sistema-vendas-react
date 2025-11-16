@@ -1,41 +1,31 @@
-// src/pages/Register.jsx
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { API_URL } from "../config";
 
 function Register() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState("");
-  const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
-    setMsg("");
 
     try {
-      const base = import.meta.env.VITE_API_URL || "";
-      const res = await fetch(`${base}/auth/registrar`, {
+      const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, telefone, senha }),
+        body: JSON.stringify({ nome, email, senha }),
       });
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({ msg: "Erro ao cadastrar" }));
-        setMsg(err.msg || err.erro || "Erro ao cadastrar");
-        return;
+      if (res.ok) {
+        alert("Usuário registrado com sucesso!");
+      } else {
+        const errData = await res.json();
+        alert("Erro: " + (errData.message || "Não foi possível registrar"));
       }
-
-      setMsg("Cadastro realizado com sucesso! Você pode entrar agora.");
-      // opcional: limpar campos
-      setNome(""); setEmail(""); setTelefone(""); setSenha("");
-      // mostrar botão/tempo e ir pra login
-      setTimeout(() => navigate("/login"), 1400);
-    } catch (error) {
-      console.error("Erro no register:", error);
-      setMsg("Erro de rede ao cadastrar.");
+    } catch (err) {
+      console.error("Erro ao registrar:", err);
+      alert("Erro de rede. Tente novamente.");
     }
   }
 
@@ -61,13 +51,6 @@ function Register() {
         />
         <br /><br />
         <input
-          type="text"
-          placeholder="Telefone"
-          value={telefone}
-          onChange={(e) => setTelefone(e.target.value)}
-        />
-        <br /><br />
-        <input
           type="password"
           placeholder="Senha"
           value={senha}
@@ -81,9 +64,7 @@ function Register() {
         </button>
       </form>
 
-      <p style={{ color: msg.includes("sucesso") ? "green" : "red" }}>{msg}</p>
-
-      <br />
+      <br /><br />
 
       <Link to="/login">
         <button>Voltar ao Login</button>
