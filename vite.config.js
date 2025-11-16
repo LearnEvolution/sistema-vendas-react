@@ -5,13 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      usePolling: true,  // ajuda no Linux e Android
+      usePolling: true,
     },
   },
   build: {
     sourcemap: false,
-  },
-  define: {
-    __APP_VERSION__: JSON.stringify(Date.now()) // força o navegador recarregar sempre
   }
 });
