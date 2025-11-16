@@ -4,13 +4,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 // CSS
-import "./index.css";   // seu CSS global antigo
-import "./style.css";   // CSS novo para Login e Register
+import "./index.css";
+import "./style.css";
 
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 function PrivateRoute({ children }) {
   const { isLogged } = useAuth();
