@@ -11,7 +11,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch(`${API_URL}/auth/register`, {  // aqui chamamos /auth/register
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, email, senha }),
@@ -19,9 +19,11 @@ function Register() {
 
       if (res.ok) {
         alert("Usuário registrado com sucesso!");
+        // redireciona para login automaticamente após registro
+        window.location.href = "/login";
       } else {
         const errData = await res.json();
-        alert("Erro: " + (errData.message || "Não foi possível registrar"));
+        alert("Erro: " + (errData.msg || "Não foi possível registrar"));
       }
     } catch (err) {
       console.error("Erro ao registrar:", err);
