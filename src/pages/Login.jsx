@@ -5,10 +5,12 @@ import { API_URL } from "../config";
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [mensagem, setMensagem] = useState(""); // NOVO
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
+    setMensagem("");
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -20,21 +22,25 @@ function Login() {
       const data = await res.json();
 
       if (!data.token) {
-        alert(data.msg || "Email ou senha incorretos");
+        setMensagem("Email ou senha incorretos."); // NOVO
         return;
       }
 
       localStorage.setItem("token", data.token);
-      navigate("/dashboard"); // vai para a página de boas-vindas
+      setMensagem("Login bem-sucedido! Redirecionando..."); // NOVO
+
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
       console.error("Erro no login:", err);
-      alert("Erro de rede. Tente novamente.");
+      setMensagem("Erro de rede. Tente novamente."); // NOVO
     }
   }
 
   return (
     <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Login</h1>
+
+      {mensagem && <p style={{ color: "red" }}>{mensagem}</p>} {/* NOVO */}
 
       <form onSubmit={handleLogin} style={{ marginTop: "20px" }}>
         <input
