@@ -20,12 +20,12 @@ function Login() {
       const data = await res.json();
 
       if (!data.token) {
-        alert("Email ou senha incorretos");
+        alert(data.msg || "Email ou senha incorretos");
         return;
       }
 
       localStorage.setItem("token", data.token);
-      navigate("/dashboard"); // Vai para a página de boas-vindas
+      navigate("/dashboard"); // vai para a página de boas-vindas
     } catch (err) {
       console.error("Erro no login:", err);
       alert("Erro de rede. Tente novamente.");

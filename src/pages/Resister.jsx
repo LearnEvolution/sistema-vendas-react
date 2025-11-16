@@ -1,29 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 
 function Register() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {  // aqui chamamos /auth/register
+      const res = await fetch(`${API_URL}/auth/registrar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, email, senha }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        alert("Usuário registrado com sucesso!");
-        // redireciona para login automaticamente após registro
-        window.location.href = "/login";
+        alert(data.msg); // msg vem do backend
+        navigate("/login"); // redireciona automaticamente
       } else {
-        const errData = await res.json();
-        alert("Erro: " + (errData.msg || "Não foi possível registrar"));
+        alert("Erro: " + (data.msg || "Não foi possível registrar"));
       }
     } catch (err) {
       console.error("Erro ao registrar:", err);
