@@ -1,3 +1,4 @@
+// src/pages/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
@@ -5,12 +6,12 @@ import { API_URL } from "../config";
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [mensagem, setMensagem] = useState(""); // <-- nova linha
+  const [msg, setMsg] = useState(""); // mensagem na tela
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
-    setMensagem(""); // limpa mensagem anterior
+    setMsg("");
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -22,29 +23,22 @@ function Login() {
       const data = await res.json();
 
       if (!data.token) {
-        setMensagem("Email ou senha incorretos"); // <-- mostra mensagem na tela
+        setMsg(data.msg || "Email ou senha incorretos");
         return;
       }
 
       localStorage.setItem("token", data.token);
-      setMensagem("Login bem-sucedido! Redirecionando..."); // feedback
-      setTimeout(() => navigate("/dashboard"), 1000); // redireciona após 1s
+      navigate("/dashboard");
     } catch (err) {
       console.error("Erro no login:", err);
-      setMensagem("Erro de rede. Tente novamente."); // <-- mensagem na tela
+      setMsg("Erro de rede. Tente novamente.");
     }
   }
 
   return (
     <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Login</h1>
-
-      {mensagem && (
-        <div style={{ marginBottom: "20px", color: "red", fontWeight: "bold" }}>
-          {mensagem}
-        </div>
-      )}
-
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
       <form onSubmit={handleLogin} style={{ marginTop: "20px" }}>
         <input
           type="email"
@@ -62,14 +56,11 @@ function Login() {
           required
         />
         <br /><br />
-
         <button type="submit" style={{ padding: "10px 20px" }}>
           Entrar
         </button>
       </form>
-
-      <br /><br />
-
+      <br />
       <Link to="/">
         <button>Voltar</button>
       </Link>
